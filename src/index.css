@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Alpuz Brand Colors - Luxury Interior Design */
+    --background: 40 20% 98%;
+    --foreground: 220 50% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 50% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 50% 15%;
+
+    /* Navy Blue - Primary */
+    --primary: 220 60% 25%;
+    --primary-foreground: 40 20% 98%;
+
+    /* Cream/Neutral - Secondary */
+    --secondary: 40 25% 94%;
+    --secondary-foreground: 220 50% 15%;
+
+    /* Muted tones */
+    --muted: 40 15% 92%;
+    --muted-foreground: 220 20% 45%;
+
+    /* Red Accent */
+    --accent: 0 75% 45%;
+    --accent-foreground: 40 20% 98%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 220 60% 25%;
+
+    --radius: 0.5rem;
+
+    /* Custom Alpuz Colors */
+    --gold: 42 75% 55%;
+    --gold-light: 42 60% 75%;
+    --navy: 220 60% 25%;
+    --navy-light: 220 40% 40%;
+    --cream: 40 25% 94%;
+    --cream-dark: 40 15% 85%;
+    --red-accent: 0 75% 45%;
+    --red-accent-dark: 0 75% 35%;
+
+    /* Gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(42 75% 55%), hsl(42 60% 70%));
+    --gradient-navy: linear-gradient(135deg, hsl(220 60% 25%), hsl(220 40% 35%));
+    --gradient-hero-overlay: linear-gradient(180deg, hsla(220 60% 15% / 0.7), hsla(220 60% 15% / 0.4));
+    
+    /* Shadows */
+    --shadow-elegant: 0 10px 40px -10px hsla(220 60% 15% / 0.15);
+    --shadow-card: 0 4px 20px -4px hsla(220 60% 15% / 0.08);
+    --shadow-gold: 0 8px 30px -8px hsla(42 75% 55% / 0.4);
+
+    /* Sidebar */
+    --sidebar-background: 40 20% 98%;
+    --sidebar-foreground: 220 50% 15%;
+    --sidebar-primary: 220 60% 25%;
+    --sidebar-primary-foreground: 40 20% 98%;
+    --sidebar-accent: 40 25% 94%;
+    --sidebar-accent-foreground: 220 50% 15%;
+    --sidebar-border: 40 20% 88%;
+    --sidebar-ring: 220 60% 25%;
+  }
+
+  .dark {
+    --background: 220 50% 8%;
+    --foreground: 40 20% 95%;
+
+    --card: 220 45% 12%;
+    --card-foreground: 40 20% 95%;
+
+    --popover: 220 45% 12%;
+    --popover-foreground: 40 20% 95%;
+
+    --primary: 42 75% 55%;
+    --primary-foreground: 220 50% 10%;
+
+    --secondary: 220 40% 18%;
+    --secondary-foreground: 40 20% 95%;
+
+    --muted: 220 35% 20%;
+    --muted-foreground: 40 15% 65%;
+
+    --accent: 0 75% 55%;
+    --accent-foreground: 40 20% 98%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 40 20% 95%;
+
+    --border: 220 35% 20%;
+    --input: 220 35% 20%;
+    --ring: 42 75% 55%;
+
+    --sidebar-background: 220 45% 10%;
+    --sidebar-foreground: 40 20% 95%;
+    --sidebar-primary: 42 75% 55%;
+    --sidebar-primary-foreground: 220 50% 10%;
+    --sidebar-accent: 220 35% 18%;
+    --sidebar-accent-foreground: 40 20% 95%;
+    --sidebar-border: 220 35% 20%;
+    --sidebar-ring: 42 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(42 75% 55%), hsl(42 60% 70%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-navy {
+    background: linear-gradient(135deg, hsl(220 60% 25%), hsl(220 40% 40%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-gold {
+    background: linear-gradient(135deg, hsl(42 75% 55%), hsl(42 60% 70%));
+  }
+
+  .bg-gradient-navy {
+    background: linear-gradient(135deg, hsl(220 60% 25%), hsl(220 40% 35%));
+  }
+
+  .bg-hero-overlay {
+    background: linear-gradient(180deg, hsla(220 60% 15% / 0.6), hsla(220 60% 15% / 0.3));
+  }
+
+  .shadow-elegant {
+    box-shadow: 0 10px 40px -10px hsla(220 60% 15% / 0.15);
+  }
+
+  .shadow-card {
+    box-shadow: 0 4px 20px -4px hsla(220 60% 15% / 0.08);
+  }
+
+  .shadow-gold {
+    box-shadow: 0 8px 30px -8px hsla(42 75% 55% / 0.4);
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.8s ease-out forwards;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Custom scrollbar - auto-hide when not scrolling (root/body only) */
+html {
+  scrollbar-width: none; /* Firefox: hidden by default */
+}
+html.scrolling {
+  scrollbar-width: thin; /* Firefox: show when scrolling */
+}
+
+/* WebKit (Chrome, Safari, Edge): hidden by default for root only */
+html::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+  transition: width 0.2s ease;
+}
+
+/* WebKit: show when scrolling */
+html.scrolling::-webkit-scrollbar {
+  width: 8px;
+}
+
+html.scrolling::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+html.scrolling::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 4px;
+}
+
+html.scrolling::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--navy-light));
+}

@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/((?!api/|src/|@|node_modules/|@id/|favicon|placeholder|robots\\.txt).*)", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/upload-media.ts": { "maxDuration": 60 }
+  }
+}

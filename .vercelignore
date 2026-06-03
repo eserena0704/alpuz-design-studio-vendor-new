@@ -1,0 +1,3 @@
+# Exclude cloned ServerlessWP repo (separate project, thousands of files)
+# Prevents EMFILE "too many open files" when running vercel dev
+serverlesswpsalpuz
