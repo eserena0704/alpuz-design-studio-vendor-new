@@ -138,7 +138,25 @@ export function adminPasswordMatches(password: unknown): boolean {
   return typeof password === "string" && password.length > 0 && password === expected;
 }
 
+const KVDB_URL = "https://kvdb.io/alpuz_design_studio_prod_2026/catalog";
+
 export async function readCatalog(): Promise<CatalogPayload> {
+  // 1. Try to read from KVdb cloud store
+  try {
+    const response = await fetch(KVDB_URL, { cache: "no-store" });
+    if (response.ok) {
+      const payload = await response.json();
+      return {
+        updatedAt: payload.updatedAt ?? new Date().toISOString(),
+        products: normalizeProducts(payload.products),
+        chatbotScript: payload.chatbotScript || "",
+      };
+    }
+  } catch (err) {
+    console.error("Failed to read catalog from KVdb cloud storage:", err);
+  }
+
+  // 2. Fallback to local catalog file if cloud fails
   try {
     if (fs.existsSync(CATALOG_FILE_PATH)) {
       const data = fs.readFileSync(CATALOG_FILE_PATH, "utf8");
@@ -150,7 +168,7 @@ export async function readCatalog(): Promise<CatalogPayload> {
       };
     }
   } catch (err) {
-    console.error("Failed to read local catalog file:", err);
+    console.error("Failed to read local fallback catalog file:", err);
   }
 
   return {
@@ -167,6 +185,25 @@ export async function saveCatalog(products: CatalogProduct[], chatbotScript?: st
     chatbotScript: chatbotScript ? String(chatbotScript).trim() : undefined,
   };
 
+  let savedToCloud = false;
+
+  // 1. Save to KVdb cloud storage
+  try {
+    const res = await fetch(KVDB_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+      savedToCloud = true;
+    } else {
+      console.error(`KVdb returned error status: ${res.status}`);
+    }
+  } catch (err) {
+    console.error("Failed to write to KVdb cloud storage:", err);
+  }
+
+  // 2. Save locally as fallback (works in dev, will fail silently in prod)
   try {
     const dir = path.dirname(CATALOG_FILE_PATH);
     if (!fs.existsSync(dir)) {
@@ -174,7 +211,11 @@ export async function saveCatalog(products: CatalogProduct[], chatbotScript?: st
     }
     fs.writeFileSync(CATALOG_FILE_PATH, JSON.stringify(payload, null, 2), "utf8");
   } catch (err) {
-    throw new Error(`Failed to write local catalog file: ${err instanceof Error ? err.message : String(err)}`);
+    console.warn("Failed to write local backup file (normal/expected on read-only production environments):", err);
+    if (!savedToCloud) {
+      // If both cloud write and local file write fail, raise the error
+      throw new Error(`Failed to write to cloud database and local fallback: ${err instanceof Error ? err.message : String(err)}`);
+    }
   }
 
   return payload;

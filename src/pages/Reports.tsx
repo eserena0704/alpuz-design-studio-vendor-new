@@ -254,6 +254,17 @@ const Reports = () => {
                   Paste the integration code snippet for your chatbot widget. It will be injected dynamically before the <code>&lt;/head&gt;</code> closing tag on all public pages.
                 </p>
               </div>
+              <div className="flex justify-end">
+                <Button 
+                  onClick={handleSave} 
+                  disabled={isSaving} 
+                  variant="outline"
+                  className="border-gold/50 text-gold hover:bg-gold/10"
+                >
+                  <Save className="mr-2 h-4 w-4" />
+                  {isSaving ? "Saving..." : "Save Chatbot Script"}
+                </Button>
+              </div>
             </CardContent>
           </Card>
         )}
