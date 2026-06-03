@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { put } from "@vercel/blob";
+import fs from "fs";
+import path from "path";
 import { adminPasswordMatches } from "../server/catalog.js";
 
 const ALLOWED_TYPES = [
@@ -26,12 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return res.status(503).json({
-      error: "Blob storage not configured",
-      detail: "Add a Vercel Blob store and set BLOB_READ_WRITE_TOKEN.",
-    });
-  }
+  // Token check removed since we write to local storage (no tokens needed)
 
   const password = req.headers["x-admin-password"];
   if (!adminPasswordMatches(Array.isArray(password) ? password[0] : password)) {
@@ -82,29 +78,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    // pathname: string. body: ArrayBuffer only (SDK can throw "Cannot convert object to primitive" with Buffer/Blob in some runtimes)
     const safeFilename = String(filePart.filename ?? "upload").replace(/\0/g, "");
-    const pathname = "wp-uploads/" + String(Date.now()) + "-" + safeFilename;
-    const data = filePart.data;
-    const arrayBuffer = data.buffer.slice(
-      data.byteOffset,
-      data.byteOffset + data.byteLength
-    ) as ArrayBuffer;
+    const relativePath = "/uploads/" + String(Date.now()) + "-" + safeFilename;
+    const absolutePath = path.join(process.cwd(), "public", relativePath);
 
-    const token = process.env.BLOB_READ_WRITE_TOKEN;
-    const opts: { access: "public"; contentType: string; addRandomSuffix: boolean; token?: string } = {
-      access: "public",
-      contentType: mime,
-      addRandomSuffix: true,
-    };
-    if (token != null && typeof token === "string" && token.length > 0) {
-      opts.token = token;
+    const dir = path.dirname(absolutePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
     }
 
-    const blob = await put(pathname, arrayBuffer, opts);
+    fs.writeFileSync(absolutePath, filePart.data);
 
     res.setHeader("Cache-Control", "no-store");
-    return res.status(200).json({ url: String(blob.url) });
+    return res.status(200).json({ url: relativePath });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return res.status(500).json({

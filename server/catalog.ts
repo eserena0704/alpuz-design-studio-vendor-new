@@ -1,4 +1,7 @@
-import { list, put } from "@vercel/blob";
+import fs from "fs";
+import path from "path";
+
+const CATALOG_FILE_PATH = path.join(process.cwd(), "server", "catalog.json");
 
 export interface CatalogImage {
   id: number;
@@ -136,54 +139,43 @@ export function adminPasswordMatches(password: unknown): boolean {
 }
 
 export async function readCatalog(): Promise<CatalogPayload> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return { updatedAt: new Date(0).toISOString(), products: defaultCatalog, chatbotScript: "" };
+  try {
+    if (fs.existsSync(CATALOG_FILE_PATH)) {
+      const data = fs.readFileSync(CATALOG_FILE_PATH, "utf8");
+      const payload = JSON.parse(data);
+      return {
+        updatedAt: payload.updatedAt ?? new Date().toISOString(),
+        products: normalizeProducts(payload.products),
+        chatbotScript: payload.chatbotScript || "",
+      };
+    }
+  } catch (err) {
+    console.error("Failed to read local catalog file:", err);
   }
 
-  const { blobs } = await list({
-    prefix: CATALOG_PREFIX,
-    limit: CATALOG_LIMIT,
-    token: process.env.BLOB_READ_WRITE_TOKEN,
-  });
-
-  const latest = blobs
-    .filter((blob) => blob.pathname.endsWith(".json"))
-    .sort((a, b) => Number(new Date(b.uploadedAt)) - Number(new Date(a.uploadedAt)))[0];
-
-  if (!latest) {
-    return { updatedAt: new Date(0).toISOString(), products: defaultCatalog, chatbotScript: "" };
-  }
-
-  const response = await fetch(latest.url, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Catalog Blob returned ${response.status}`);
-  }
-
-  const payload = (await response.json()) as Partial<CatalogPayload>;
   return {
-    updatedAt: payload.updatedAt ?? latest.uploadedAt.toISOString(),
-    products: normalizeProducts(payload.products),
-    chatbotScript: payload.chatbotScript || "",
+    updatedAt: new Date(0).toISOString(),
+    products: defaultCatalog,
+    chatbotScript: "",
   };
 }
 
 export async function saveCatalog(products: CatalogProduct[], chatbotScript?: string): Promise<CatalogPayload> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    throw new Error("BLOB_READ_WRITE_TOKEN is not configured");
-  }
-
   const payload: CatalogPayload = {
     updatedAt: new Date().toISOString(),
     products: normalizeProducts(products),
     chatbotScript: chatbotScript ? String(chatbotScript).trim() : undefined,
   };
 
-  await put(`${CATALOG_PREFIX}${Date.now()}.json`, JSON.stringify(payload, null, 2), {
-    access: "public",
-    addRandomSuffix: false,
-    contentType: "application/json",
-    token: process.env.BLOB_READ_WRITE_TOKEN,
-  });
+  try {
+    const dir = path.dirname(CATALOG_FILE_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(CATALOG_FILE_PATH, JSON.stringify(payload, null, 2), "utf8");
+  } catch (err) {
+    throw new Error(`Failed to write local catalog file: ${err instanceof Error ? err.message : String(err)}`);
+  }
 
   return payload;
 }

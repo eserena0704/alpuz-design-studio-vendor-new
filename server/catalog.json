@@ -1,0 +1,162 @@
+{
+  "updatedAt": "2026-06-03T00:00:00.000Z",
+  "products": [
+    {
+      "id": 1001,
+      "name": "Kitchen Cabinet Renovation Package",
+      "slug": "kitchen-cabinet-renovation-package",
+      "permalink": "",
+      "price": "3888",
+      "regular_price": "3888",
+      "sale_price": "",
+      "short_description": "Custom kitchen cabinet package for practical cooking zones, clean storage and premium everyday finishes.",
+      "description": "Custom kitchen cabinets\nQuartz-look countertop options\nSoft-close hinges and drawer runners\nSite measurement and design consultation",
+      "images": [
+        {
+          "id": 1,
+          "src": "/catalog/package-kitchen.jpg",
+          "alt": "Kitchen cabinet renovation package"
+        }
+      ],
+      "categories": [
+        {
+          "id": 1,
+          "name": "Renovation Promotions"
+        }
+      ],
+      "status": "publish",
+      "type": "simple"
+    },
+    {
+      "id": 1002,
+      "name": "BTO Renovation Package",
+      "slug": "bto-renovation-package",
+      "permalink": "",
+      "price": "7888",
+      "regular_price": "7888",
+      "sale_price": "",
+      "short_description": "Move-in ready BTO essentials from $7,888, planned for a clean handover and fast setup.",
+      "description": "2-room from $7,888\n3-room from $10,888\n4-room from $12,888\n5-room from $14,888",
+      "images": [
+        {
+          "id": 1,
+          "src": "/catalog/package-bto.jpg",
+          "alt": "BTO renovation package"
+        }
+      ],
+      "categories": [
+        {
+          "id": 1,
+          "name": "Renovation Promotions"
+        }
+      ],
+      "status": "publish",
+      "type": "simple"
+    },
+    {
+      "id": 1003,
+      "name": "2 Bathroom Renovation Package",
+      "slug": "two-bathroom-renovation-package",
+      "permalink": "",
+      "price": "9888",
+      "regular_price": "9888",
+      "sale_price": "",
+      "short_description": "Refresh two bathrooms with coordinated tiling, waterproofing, fixtures and vanity details.",
+      "description": "2 bathrooms included\nWall and floor tiling works\nWaterproofing and plumbing coordination\nVanity, mirror and fixture planning",
+      "images": [
+        {
+          "id": 1,
+          "src": "/catalog/package-bathroom.jpg",
+          "alt": "Two bathroom renovation package"
+        }
+      ],
+      "categories": [
+        {
+          "id": 1,
+          "name": "Renovation Promotions"
+        }
+      ],
+      "status": "publish",
+      "type": "simple"
+    },
+    {
+      "id": 1004,
+      "name": "Resale Kitchen Renovation Package",
+      "slug": "resale-kitchen-renovation-package",
+      "permalink": "",
+      "price": "10888",
+      "regular_price": "10888",
+      "sale_price": "",
+      "short_description": "A sharper resale kitchen package covering dismantling, cabinet rebuild and refreshed work surfaces.",
+      "description": "Existing kitchen refresh\nCabinet replacement and planning\nCountertop and backsplash options\nPlumbing and electrical coordination",
+      "images": [
+        {
+          "id": 1,
+          "src": "/catalog/package-carpentry.jpg",
+          "alt": "Resale kitchen renovation package"
+        }
+      ],
+      "categories": [
+        {
+          "id": 1,
+          "name": "Renovation Promotions"
+        }
+      ],
+      "status": "publish",
+      "type": "simple"
+    },
+    {
+      "id": 1005,
+      "name": "Kitchen and 2 Toilet Renovation Package",
+      "slug": "kitchen-and-two-toilet-renovation-package",
+      "permalink": "",
+      "price": "18888",
+      "regular_price": "18888",
+      "sale_price": "",
+      "short_description": "A high-impact home refresh combining the kitchen and both toilets into one coordinated package.",
+      "description": "Kitchen cabinet package\n2 toilet renovation works\nMaterial and colour coordination\nProject scheduling across wet areas",
+      "images": [
+        {
+          "id": 1,
+          "src": "/catalog/package-resale.jpg",
+          "alt": "Kitchen and two toilet renovation package"
+        }
+      ],
+      "categories": [
+        {
+          "id": 1,
+          "name": "Renovation Promotions"
+        }
+      ],
+      "status": "publish",
+      "type": "simple"
+    },
+    {
+      "id": 1006,
+      "name": "Commercial Fit-Out",
+      "slug": "commercial-fit-out",
+      "permalink": "",
+      "price": "",
+      "regular_price": "",
+      "sale_price": "",
+      "short_description": "Quote-on-request fit-out support for offices, retail, F&B and business spaces.",
+      "description": "Business space planning\nBrand-aligned design direction\nM&E and site coordination\nProject management for commercial handover",
+      "images": [
+        {
+          "id": 1,
+          "src": "/catalog/package-commercial.jpg",
+          "alt": "Commercial fit-out"
+        }
+      ],
+      "categories": [
+        {
+          "id": 1,
+          "name": "Business"
+        }
+      ],
+      "status": "publish",
+      "type": "simple"
+    }
+  ],
+  "chatbotScript": ""
+}
