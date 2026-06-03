@@ -24,6 +24,7 @@ export interface CatalogProduct {
 export interface CatalogPayload {
   updatedAt: string;
   products: CatalogProduct[];
+  chatbotScript?: string;
 }
 
 export interface CheckoutSessionResponse {

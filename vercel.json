@@ -1,6 +1,8 @@
 {
   "rewrites": [
-    { "source": "/((?!api/|src/|@|node_modules/|@id/|favicon|placeholder|robots\\.txt).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|src/|@|node_modules/|@id/|favicon|placeholder|robots\\.txt|sitemap\\.xml).*)", "destination": "/index.html" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/robots.txt", "destination": "/api/robots" }
   ],
   "functions": {
     "api/upload-media.ts": { "maxDuration": 60 }

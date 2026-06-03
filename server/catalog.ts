@@ -31,6 +31,7 @@ export interface CatalogProduct {
 export interface CatalogPayload {
   updatedAt: string;
   products: CatalogProduct[];
+  chatbotScript?: string;
 }
 
 const CATALOG_PREFIX = "alpuz/catalog/";
@@ -136,7 +137,7 @@ export function adminPasswordMatches(password: unknown): boolean {
 
 export async function readCatalog(): Promise<CatalogPayload> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return { updatedAt: new Date(0).toISOString(), products: defaultCatalog };
+    return { updatedAt: new Date(0).toISOString(), products: defaultCatalog, chatbotScript: "" };
   }
 
   const { blobs } = await list({
@@ -150,7 +151,7 @@ export async function readCatalog(): Promise<CatalogPayload> {
     .sort((a, b) => Number(new Date(b.uploadedAt)) - Number(new Date(a.uploadedAt)))[0];
 
   if (!latest) {
-    return { updatedAt: new Date(0).toISOString(), products: defaultCatalog };
+    return { updatedAt: new Date(0).toISOString(), products: defaultCatalog, chatbotScript: "" };
   }
 
   const response = await fetch(latest.url, { cache: "no-store" });
@@ -162,10 +163,11 @@ export async function readCatalog(): Promise<CatalogPayload> {
   return {
     updatedAt: payload.updatedAt ?? latest.uploadedAt.toISOString(),
     products: normalizeProducts(payload.products),
+    chatbotScript: payload.chatbotScript || "",
   };
 }
 
-export async function saveCatalog(products: CatalogProduct[]): Promise<CatalogPayload> {
+export async function saveCatalog(products: CatalogProduct[], chatbotScript?: string): Promise<CatalogPayload> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     throw new Error("BLOB_READ_WRITE_TOKEN is not configured");
   }
@@ -173,6 +175,7 @@ export async function saveCatalog(products: CatalogProduct[]): Promise<CatalogPa
   const payload: CatalogPayload = {
     updatedAt: new Date().toISOString(),
     products: normalizeProducts(products),
+    chatbotScript: chatbotScript ? String(chatbotScript).trim() : undefined,
   };
 
   await put(`${CATALOG_PREFIX}${Date.now()}.json`, JSON.stringify(payload, null, 2), {

@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
       const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body;
-      const catalog = await saveCatalog(body?.products);
+      const catalog = await saveCatalog(body?.products, body?.chatbotScript);
       res.setHeader("Cache-Control", "no-store");
       return res.status(200).json(catalog);
     } catch (err) {

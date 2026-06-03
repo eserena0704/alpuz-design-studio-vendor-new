@@ -39,6 +39,7 @@ const Reports = () => {
   const [loginPassword, setLoginPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem(ADMIN_STORAGE_KEY)));
   const [products, setProducts] = useState<CatalogProduct[]>([]);
+  const [chatbotScript, setChatbotScript] = useState("");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -51,6 +52,7 @@ const Reports = () => {
 
   useEffect(() => {
     if (data?.products) setProducts(data.products);
+    if (data?.chatbotScript !== undefined) setChatbotScript(data.chatbotScript);
   }, [data]);
 
   const publishedCount = useMemo(
@@ -131,8 +133,9 @@ const Reports = () => {
     setStatusMessage(null);
 
     try {
-      const saved = await saveCatalog(password, products);
+      const saved = await saveCatalog(password, products, chatbotScript);
       setProducts(saved.products);
+      if (saved.chatbotScript !== undefined) setChatbotScript(saved.chatbotScript);
       queryClient.setQueryData(["catalog"], saved);
       setStatusMessage("Catalog saved to Vercel Blob.");
     } catch (err) {
@@ -228,6 +231,31 @@ const Reports = () => {
           <div className="mb-6 rounded-md border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {errorMessage || (error instanceof Error ? error.message : "Catalog failed to load.")}
           </div>
+        )}
+
+        {/* Chatbot Integration */}
+        {!isLoading && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="font-display text-xl text-foreground">Chatbot Integration</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="chatbot-script">Chatbot Script Tag</Label>
+                <Textarea
+                  id="chatbot-script"
+                  placeholder='<script src="https://chatbot.aiconvo.sg/chat/widget.js?work-space-Id=155"></script>'
+                  value={chatbotScript}
+                  onChange={(event) => setChatbotScript(event.target.value)}
+                  rows={3}
+                  className="font-mono text-xs"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Paste the integration code snippet for your chatbot widget. It will be injected dynamically before the <code>&lt;/head&gt;</code> closing tag on all public pages.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {isLoading ? (

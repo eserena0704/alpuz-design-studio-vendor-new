@@ -11,6 +11,7 @@ import Products from "./pages/Products";
 import Checkout from "./pages/Checkout";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
+import ChatbotLoader from "./components/ChatbotLoader";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <CartProvider>
       <AutoHideScrollbar />
+      <ChatbotLoader />
       <TooltipProvider>
         <Toaster />
         <Sonner />

@@ -64,6 +64,7 @@ export async function fetchCatalog() {
       return {
         updatedAt: new Date(0).toISOString(),
         products: defaultProducts,
+        chatbotScript: "",
       };
     }
     throw err;
@@ -72,19 +73,21 @@ export async function fetchCatalog() {
 
 export async function saveCatalog(
   password: string,
-  products: import("@/types/catalog").CatalogProduct[]
+  products: import("@/types/catalog").CatalogProduct[],
+  chatbotScript?: string
 ) {
   try {
     return await apiFetch<import("@/types/catalog").CatalogPayload>("/api/catalog", {
       method: "POST",
       headers: { "x-admin-password": password },
-      body: JSON.stringify({ products }),
+      body: JSON.stringify({ products, chatbotScript }),
     });
   } catch (err) {
     if (import.meta.env.DEV && password === LOCAL_ADMIN_PASSWORD) {
       const catalog = {
         updatedAt: new Date().toISOString(),
         products,
+        chatbotScript,
       };
       localStorage.setItem(LOCAL_CATALOG_KEY, JSON.stringify(catalog));
       return catalog;
