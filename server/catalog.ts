@@ -138,12 +138,15 @@ export function adminPasswordMatches(password: unknown): boolean {
   return typeof password === "string" && password.length > 0 && password === expected;
 }
 
-const KVDB_URL = "https://kvdb.io/alpuz_design_studio_prod_2026/catalog";
+const JSONBLOB_URL = "https://jsonblob.com/api/jsonBlob/019e8beb-8f61-7876-b766-9703c82dd062";
 
 export async function readCatalog(): Promise<CatalogPayload> {
-  // 1. Try to read from KVdb cloud store
+  // 1. Try to read from JSONBlob cloud store
   try {
-    const response = await fetch(KVDB_URL, { cache: "no-store" });
+    const response = await fetch(JSONBLOB_URL, {
+      headers: { "Accept": "application/json" },
+      cache: "no-store"
+    });
     if (response.ok) {
       const payload = await response.json();
       return {
@@ -153,7 +156,7 @@ export async function readCatalog(): Promise<CatalogPayload> {
       };
     }
   } catch (err) {
-    console.error("Failed to read catalog from KVdb cloud storage:", err);
+    console.error("Failed to read catalog from JSONBlob cloud storage:", err);
   }
 
   // 2. Fallback to local catalog file if cloud fails
@@ -187,20 +190,23 @@ export async function saveCatalog(products: CatalogProduct[], chatbotScript?: st
 
   let savedToCloud = false;
 
-  // 1. Save to KVdb cloud storage
+  // 1. Save to JSONBlob cloud storage
   try {
-    const res = await fetch(KVDB_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const res = await fetch(JSONBLOB_URL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
       body: JSON.stringify(payload),
     });
     if (res.ok) {
       savedToCloud = true;
     } else {
-      console.error(`KVdb returned error status: ${res.status}`);
+      console.error(`JSONBlob returned error status: ${res.status}`);
     }
   } catch (err) {
-    console.error("Failed to write to KVdb cloud storage:", err);
+    console.error("Failed to write to JSONBlob cloud storage:", err);
   }
 
   // 2. Save locally as fallback (works in dev, will fail silently in prod)
